@@ -231,7 +231,11 @@ function AuthPanel({ user, provider, authType, providers, error, isLoggedIn, onB
 
           <div className="login-section">
             <div className="section-label">OAuth (role by provider)</div>
-            {providers.map(p => {
+            {[...providers].sort((a, b) => {
+              const roleA = PROVIDER_CONFIG[a]?.role ?? ''
+              const roleB = PROVIDER_CONFIG[b]?.role ?? ''
+              return roleA === roleB ? 0 : roleA === 'admin' ? -1 : 1
+            }).map(p => {
               const config = PROVIDER_CONFIG[p]
               if (!config) return null
               const Icon = config.icon
@@ -288,11 +292,11 @@ function EmployeePanel({ result, loading, error, statusCode, onFetch }: Employee
         </div>
         <div className="field-access-row">
           <span className="field-access-role">Admin</span>
-          <span className="field-access-fields">id, name, department, title, salary, ssn, homeAddress, personalEmail</span>
+          <span className="field-access-fields">id, name, email, department, title, salary, ssn, homeAddress, personalEmail</span>
         </div>
         <div className="field-access-row">
           <span className="field-access-role">Reader</span>
-          <span className="field-access-fields">id, name, department, title</span>
+          <span className="field-access-fields">id, name, email, department, title</span>
         </div>
       </div>
 

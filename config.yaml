@@ -31,7 +31,7 @@ extensions:
             role: admin
           - strategy: email
             pattern: "*@mycompany.com"
-            role: standard
+            role: viewer
           - strategy: provider
             pattern: "github"
-            role: standard
+            role: viewer
