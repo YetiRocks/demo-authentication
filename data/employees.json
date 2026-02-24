@@ -1,0 +1,61 @@
+{
+  "database": "web-auth-demo",
+  "table": "Employee",
+  "records": [
+    {
+      "id": "emp-001",
+      "name": "Alice Johnson",
+      "email": "alice@example.com",
+      "department": "Engineering",
+      "title": "Senior Developer",
+      "salary": 145000,
+      "ssn": "123-45-6789",
+      "homeAddress": "123 Oak Street, San Francisco, CA",
+      "personalEmail": "alice.j@personal.com"
+    },
+    {
+      "id": "emp-002",
+      "name": "Bob Smith",
+      "email": "bob@example.com",
+      "department": "Marketing",
+      "title": "Marketing Manager",
+      "salary": 125000,
+      "ssn": "234-56-7890",
+      "homeAddress": "456 Pine Avenue, Seattle, WA",
+      "personalEmail": "bob.smith@personal.com"
+    },
+    {
+      "id": "emp-003",
+      "name": "Carol Williams",
+      "email": "carol@example.com",
+      "department": "Engineering",
+      "title": "Tech Lead",
+      "salary": 175000,
+      "ssn": "345-67-8901",
+      "homeAddress": "789 Maple Drive, Austin, TX",
+      "personalEmail": "carol.w@personal.com"
+    },
+    {
+      "id": "emp-004",
+      "name": "David Brown",
+      "email": "david@example.com",
+      "department": "Sales",
+      "title": "Sales Representative",
+      "salary": 95000,
+      "ssn": "456-78-9012",
+      "homeAddress": "321 Elm Court, Denver, CO",
+      "personalEmail": "david.b@personal.com"
+    },
+    {
+      "id": "emp-005",
+      "name": "Eva Martinez",
+      "email": "eva@example.com",
+      "department": "HR",
+      "title": "HR Director",
+      "salary": 135000,
+      "ssn": "567-89-0123",
+      "homeAddress": "654 Cedar Lane, Boston, MA",
+      "personalEmail": "eva.m@personal.com"
+    }
+  ]
+}

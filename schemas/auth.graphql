@@ -1,0 +1,13 @@
+# Auth Demo Schema - Employee table for RBAC demonstration
+
+type Employee @table(database: "demo-authentication") @export {
+  id: String!
+  name: String!
+  email: String!
+  department: String!
+  title: String!
+  salary: Float
+  ssn: String
+  homeAddress: String
+  personalEmail: String
+}
