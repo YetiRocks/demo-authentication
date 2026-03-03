@@ -462,15 +462,20 @@ export function AuthPage() {
 
   // Logout handler
   const handleLogout = useCallback(async () => {
-    if (authType === 'oauth') {
-      try {
+    try {
+      if (authType === 'oauth') {
         await fetch(`${AUTH_BASE}/oauth_logout`, {
           method: 'POST',
           credentials: 'include',
         })
-      } catch {
-        // Best effort
       }
+      // Always call JWT logout to clear the yeti_token cookie
+      await fetch(`${AUTH_BASE}/login`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+    } catch {
+      // Best effort
     }
 
     setUser(null)
