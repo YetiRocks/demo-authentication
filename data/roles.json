@@ -1,0 +1,54 @@
+[
+  {
+    "id": "admin",
+    "name": "Admin",
+    "permission": {
+      "databases": {
+        "demo-authentication": {
+          "tables": {
+            "Employee": {
+              "read": true,
+              "insert": true,
+              "update": true,
+              "delete": true
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "viewer",
+    "name": "Viewer",
+    "permission": {
+      "databases": {
+        "data": {
+          "tables": {
+            "*": {
+              "read": true,
+              "insert": false,
+              "update": false,
+              "delete": false
+            }
+          }
+        },
+        "demo-authentication": {
+          "tables": {
+            "Employee": {
+              "read": true,
+              "insert": false,
+              "update": false,
+              "delete": false,
+              "attribute_permissions": {
+                "salary": { "read": false, "write": false },
+                "ssn": { "read": false, "write": false },
+                "homeAddress": { "read": false, "write": false },
+                "personalEmail": { "read": false, "write": false }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+]

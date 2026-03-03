@@ -9,7 +9,11 @@ graphql: true
 schemas:
   - schemas/auth.graphql
 
-dataLoader: data/*.json
+dataLoader: data/employees.json
+
+authLoader:
+  roles: data/roles.json
+  users: data/users.json
 
 static_files:
   path: web
