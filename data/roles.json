@@ -1,17 +1,18 @@
 [
   {
+    "id": "super_user",
+    "name": "Super User",
+    "permission": { "super_user": true, "databases": {} }
+  },
+  {
     "id": "admin",
     "name": "Admin",
     "permission": {
+      "super_user": true,
       "databases": {
         "demo-authentication": {
           "tables": {
-            "Employee": {
-              "read": true,
-              "insert": true,
-              "update": true,
-              "delete": true
-            }
+            "Employee": { "read": true, "insert": true, "update": true, "delete": true }
           }
         }
       }
@@ -24,21 +25,13 @@
       "databases": {
         "data": {
           "tables": {
-            "*": {
-              "read": true,
-              "insert": false,
-              "update": false,
-              "delete": false
-            }
+            "*": { "read": true, "insert": false, "update": false, "delete": false }
           }
         },
         "demo-authentication": {
           "tables": {
             "Employee": {
-              "read": true,
-              "insert": false,
-              "update": false,
-              "delete": false,
+              "read": true, "insert": false, "update": false, "delete": false,
               "attribute_permissions": {
                 "salary": { "read": false, "write": false },
                 "ssn": { "read": false, "write": false },
