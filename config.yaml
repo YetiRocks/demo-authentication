@@ -26,16 +26,15 @@ static_files:
     sourceDir: source
     command: npm run build
 
-extensions:
-  - yeti-auth:
-      oauth:
-        rules:
-          - strategy: provider
-            pattern: "google"
-            role: admin
-          - strategy: email
-            pattern: "*@mycompany.com"
-            role: viewer
-          - strategy: provider
-            pattern: "github"
-            role: viewer
+auth:
+  oauth:
+    rules:
+      - strategy: provider
+        pattern: "google"
+        role: admin
+      - strategy: email
+        pattern: "*@mycompany.com"
+        role: viewer
+      - strategy: provider
+        pattern: "github"
+        role: viewer

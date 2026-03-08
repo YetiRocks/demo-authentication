@@ -268,10 +268,11 @@ interface EmployeePanelProps {
   loading: boolean
   error: string | null
   statusCode: number | null
+  isLoggedIn: boolean
   onFetch: () => void
 }
 
-function EmployeePanel({ result, loading, error, statusCode, onFetch }: EmployeePanelProps) {
+function EmployeePanel({ result, loading, error, statusCode, isLoggedIn, onFetch }: EmployeePanelProps) {
   const badge = statusCode ? `${statusCode}` : 'Ready'
   const badgeSuccess = statusCode === 200
   const badgeError = statusCode !== null && statusCode !== 200
@@ -311,7 +312,7 @@ function EmployeePanel({ result, loading, error, statusCode, onFetch }: Employee
 
       <div className="employee-results-split">
         {result === null && !error ? (
-          <div className="empty-state">
+          <div className="empty-state" style={{ textAlign: 'center', width: '100%' }}>
             <p>Click the button to query employee data</p>
             <p className="empty-hint">Fields returned depend on your role</p>
           </div>
@@ -340,6 +341,11 @@ function EmployeePanel({ result, loading, error, statusCode, onFetch }: Employee
           </>
         )}
       </div>
+      {result && !isLoggedIn && statusCode === 200 && (
+        <div style={{ marginTop: 8, padding: '10px 14px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 6, color: '#fff', textAlign: 'left', fontSize: 13, lineHeight: 1.5 }}>
+          Development mode: authentication is not enforced. All fields are returned because no credentials were sent. In production, this request would return 401.
+        </div>
+      )}
     </Panel>
   )
 }
@@ -495,16 +501,6 @@ export function AuthPage() {
     setEmployeeError(null)
     setEmployeeResult(null)
 
-    if (!isLoggedIn) {
-      setEmployeeStatusCode(401)
-      setEmployeeError(JSON.stringify({
-        error: "Unauthorized",
-        message: "Please log in to access employee data"
-      }, null, 2))
-      setEmployeeLoading(false)
-      return
-    }
-
     try {
       const headers: Record<string, string> = {}
       if (authType === 'basic' && basicCredentials) {
@@ -580,6 +576,7 @@ export function AuthPage() {
           loading={employeeLoading}
           error={employeeError}
           statusCode={employeeStatusCode}
+          isLoggedIn={isLoggedIn}
           onFetch={fetchEmployees}
         />
       </div>
