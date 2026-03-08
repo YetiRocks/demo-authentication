@@ -6,10 +6,10 @@
 
 # demo-authentication
 
-[![Yeti](https://img.shields.io/badge/Yeti-Application-blue)](https://yetirocks.com)
+[![Yeti](https://img.shields.io/badge/Yeti-Demo-blue)](https://yetirocks.com/demo-authentication)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-> **[Yeti](https://yetirocks.com)** — The Performance Platform for Agent-Driven Development.
+> **[Yeti](https://yetirocks.com)** - The Performance Platform for Agent-Driven Development.
 > Schema-driven APIs, real-time streaming, and vector search. From prompt to production.
 
 Role-based access control with Basic, JWT, and OAuth login. Admin and viewer roles see different fields -- sensitive fields like salary and SSN are masked for non-admin users.
