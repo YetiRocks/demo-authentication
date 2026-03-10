@@ -27,7 +27,18 @@ static_files:
     command: npm run build
 
 auth:
+  jwt:
+    secret: "VMiGVUx8tm8AcwE6A8bCGoO3x1Hcb4ktH+cr34JOJWM="
+    algorithm: "HS256"
+    accessTtl: 900
+    refreshTtl: 604800
   oauth:
+    github:
+      clientId: "Ov23li6HKMZyZVy63t5I"
+      clientSecret: "9f9d4ce92dc4d84ba5b40e5c0d070b1c8c7b2969"
+    google:
+      clientId: "528198912652-ihm71nvopjo0nt1c4hguq9bpm778s1to.apps.googleusercontent.com"
+      clientSecret: "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"
     rules:
       - strategy: provider
         pattern: "google"
