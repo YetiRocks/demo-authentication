@@ -3,35 +3,6 @@
 /* ── Auth Page Layout ── */
 .panel-content { flex: 1; overflow: auto; padding: var(--space-8); display: flex; flex-direction: column; align-items: center; min-height: 0; }
 
-/* ── User Info ── */
-.user-info { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.avatar { width: 96px; height: 96px; border-radius: var(--radius-full); margin-bottom: var(--space-4); border: 3px solid rgba(206, 66, 43, 0.8); }
-.welcome { font-size: var(--font-size-xl); font-weight: 600; margin-bottom: var(--space-2); }
-.email { color: var(--color-grey); font-size: var(--font-size-sm); margin-bottom: var(--space-3); }
-.provider-badge { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); background: var(--color-white-overlay); border: 1px solid var(--color-border-primary); border-radius: var(--radius-full); font-size: var(--font-size-xs); color: var(--color-grey); margin-bottom: var(--space-6); }
-.provider-badge svg { width: 14px; height: 14px; }
-
-/* ── Login Form ── */
-.login-buttons { display: flex; flex-direction: column; gap: var(--space-3); width: 100%; max-width: 300px; }
-.login-section { display: flex; flex-direction: column; gap: var(--space-2); width: 100%; }
-.section-label { font-size: var(--font-size-xs); color: var(--color-grey); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-1); }
-.login-divider { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-4) 0; color: var(--color-grey); font-size: var(--font-size-xs); }
-.login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: var(--color-border-primary); }
-
-/* ── Auth Button Variants ── */
-.btn-basic, .btn-jwt, .btn-oauth { justify-content: flex-start; padding: var(--space-3) var(--space-4); background: rgba(36, 41, 46, 0.5); border-color: var(--color-border-primary); color: var(--color-white); }
-.btn-basic:hover:not(:disabled), .btn-jwt:hover:not(:disabled), .btn-oauth:hover:not(:disabled) { background: var(--color-white-overlay); transform: translateY(-1px); }
-.btn-logout { background: var(--color-white-overlay); color: var(--color-white); }
-.btn-logout:hover { background: rgba(255, 255, 255, 0.06); }
-
-/* ── Role Badge ── */
-.role-badge { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); font-size: var(--font-size-sm); font-weight: 500; margin-bottom: var(--space-3); background: var(--color-white-overlay); color: var(--color-white); border: 1px solid var(--color-border-primary); }
-.role-badge svg { width: 16px; height: 16px; }
-
-/* ── Auth Messages ── */
-.error-message { background: rgba(209, 105, 105, 0.1); border: 1px solid rgba(209, 105, 105, 0.3); color: var(--color-error); padding: var(--space-4); border-radius: var(--radius-md); margin-bottom: var(--space-4); font-size: var(--font-size-sm); width: 100%; max-width: 300px; text-align: center; }
-.info-message { color: var(--color-grey); font-size: var(--font-size-sm); text-align: center; padding: var(--space-4); }
-
 /* ── API Panels ── */
 .api-panels { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; overflow: hidden; }
 

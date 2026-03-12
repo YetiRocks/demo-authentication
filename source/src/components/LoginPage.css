@@ -1,0 +1,204 @@
+/* LoginPage — Themeable login component
+ *
+ * Override any --lp-* variable on .login-page (or a parent) to restyle.
+ * Defaults reference yeti.css design-system tokens where available.
+ */
+
+.login-page {
+  /* ── Theme Variables ── */
+  --lp-max-width: 340px;
+  --lp-bg: transparent;
+  --lp-text: var(--color-white, #ddd);
+  --lp-text-muted: var(--color-grey, #666);
+  --lp-border: var(--color-white-overlay, rgba(255,255,255,0.06));
+  --lp-surface: var(--color-white-overlay, rgba(255,255,255,0.06));
+  --lp-accent: var(--color-primary, #D34516);
+  --lp-btn-bg: rgba(36, 41, 46, 0.5);
+  --lp-btn-hover: rgba(255, 255, 255, 0.06);
+  --lp-radius: var(--radius-md, 8px);
+  --lp-radius-full: var(--radius-full, 9999px);
+  --lp-font: var(--font-family-base, system-ui, sans-serif);
+  --lp-avatar-size: 96px;
+  --lp-error-bg: rgba(209, 105, 105, 0.1);
+  --lp-error-border: rgba(209, 105, 105, 0.3);
+  --lp-error-text: var(--color-error, #bb2124);
+
+  /* ── Layout ── */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+  min-height: 0;
+  flex: 1;
+  padding: 2rem 1rem;
+  background: var(--lp-bg);
+  font-family: var(--lp-font);
+  color: var(--lp-text);
+  border-right: 1px solid var(--lp-border);
+}
+
+/* ── Error Banner ── */
+.lp-error {
+  background: var(--lp-error-bg);
+  border: 1px solid var(--lp-error-border);
+  color: var(--lp-error-text);
+  padding: 0.75rem 1rem;
+  border-radius: var(--lp-radius);
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  width: 100%;
+  max-width: var(--lp-max-width);
+  text-align: center;
+}
+
+/* ── User Card (logged in) ── */
+.lp-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.lp-avatar {
+  width: var(--lp-avatar-size);
+  height: var(--lp-avatar-size);
+  border-radius: var(--lp-radius-full);
+  border: 3px solid color-mix(in srgb, var(--lp-accent) 80%, transparent);
+  margin-bottom: 1rem;
+}
+
+.lp-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.lp-email {
+  color: var(--lp-text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.lp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.lp-badge svg { width: 16px; height: 16px; }
+
+.lp-provider-badge {
+  composes: lp-badge;
+  font-size: 0.75rem;
+  color: var(--lp-text-muted);
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.lp-provider-badge svg { width: 14px; height: 14px; }
+
+/* ── Login Form (logged out) ── */
+.lp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: var(--lp-max-width);
+}
+
+.lp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lp-label {
+  font-size: 0.75rem;
+  color: var(--lp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.125rem;
+}
+
+.lp-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  color: var(--lp-text-muted);
+  font-size: 0.75rem;
+}
+
+.lp-divider::before,
+.lp-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--lp-border);
+}
+
+/* ── Buttons ── */
+.lp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: var(--lp-font);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  background: var(--lp-btn-bg);
+  color: var(--lp-text);
+  white-space: nowrap;
+}
+
+.lp-btn:hover:not(:disabled) {
+  background: var(--lp-btn-hover);
+  transform: translateY(-1px);
+}
+
+.lp-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.lp-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+.lp-btn-logout {
+  background: var(--lp-surface);
+  justify-content: center;
+}
+
+.lp-btn-logout:hover {
+  background: var(--lp-btn-hover);
+}
+
+.lp-btn-accent {
+  background: var(--lp-accent);
+  border-color: var(--lp-accent);
+  justify-content: center;
+}
+
+.lp-btn-accent:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--lp-accent) 85%, white);
+  border-color: color-mix(in srgb, var(--lp-accent) 85%, white);
+}
+
+/* ── Info message ── */
+.lp-info {
+  color: var(--lp-text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 1rem;
+}

@@ -8,7 +8,6 @@
     "id": "admin",
     "name": "Admin",
     "permission": {
-      "super_user": true,
       "databases": {
         "demo-authentication": {
           "tables": {
