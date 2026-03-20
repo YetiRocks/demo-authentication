@@ -54,14 +54,14 @@ name: "Authentication Demo"
 app_id: "demo-authentication"
 version: "1.0.0"
 description: "Role-based access control with Basic, JWT, and OAuth login"
-enabled: true
-rest: true
-graphql: true
-
 schemas:
   - schemas/auth.graphql
 
-dataLoader: data/*.json
+dataLoader: data/employees.json
+
+authLoader:
+  roles: data/roles.json
+  users: data/users.json
 
 static_files:
   path: web
@@ -74,19 +74,25 @@ static_files:
     sourceDir: source
     command: npm run build
 
-extensions:
-  - yeti-auth:
-      oauth:
-        rules:
-          - strategy: provider
-            pattern: "google"
-            role: admin
-          - strategy: email
-            pattern: "*@mycompany.com"
-            role: standard
-          - strategy: provider
-            pattern: "github"
-            role: standard
+auth:
+  jwt:
+    secret: "${JWT_SECRET}"
+    accessTtl: 900
+    refreshTtl: 604800
+  oauth:
+    github:
+      clientId: "${GITHUB_CLIENT_ID}"
+      clientSecret: "${GITHUB_CLIENT_SECRET}"
+    google:
+      clientId: "${GOOGLE_CLIENT_ID}"
+      clientSecret: "${GOOGLE_CLIENT_SECRET}"
+    rules:
+      - strategy: provider
+        pattern: "google"
+        role: admin
+      - strategy: provider
+        pattern: "github"
+        role: viewer
 ```
 
 ## Schema

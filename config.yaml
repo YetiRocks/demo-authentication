@@ -2,10 +2,6 @@ name: "Authentication Demo"
 app_id: "demo-authentication"
 version: "1.0.0"
 description: "Role-based access control with Basic, JWT, and OAuth login"
-enabled: true
-rest: true
-graphql: true
-
 schemas:
   - schemas/auth.graphql
 
