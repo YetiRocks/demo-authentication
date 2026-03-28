@@ -212,7 +212,7 @@ export function AuthPage() {
     }
 
     setLoading(false)
-  }, [])
+  }, [providerRoles])
 
   // Basic auth login
   const handleBasicLogin = useCallback((username: string, password: string) => {
