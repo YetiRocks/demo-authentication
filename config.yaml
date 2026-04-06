@@ -4,7 +4,7 @@ customer_id: "yeti"
 version: "1.0.0"
 description: "Role-based access control with Basic, JWT, and OAuth login"
 schemas:
-  - schemas/auth.graphql
+  path: schemas/auth.graphql
 
 dataLoader: data/employees.json
 
@@ -12,11 +12,12 @@ authLoader:
   roles: data/roles.json
   users: data/users.json
 
-static_files:
+static:
   path: web
+  route: /
   spa: true
   build:
-    sourceDir: source
+    source: source
     command: npm run build
 
 auth:

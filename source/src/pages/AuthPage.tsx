@@ -27,7 +27,6 @@ interface EmployeeResponse {
 // ── Utils ──────────────────────────────────────────────────────────────────────
 
 const AUTH_BASE = window.location.origin + '/yeti-auth'
-const DEMOS_BASE = window.location.origin + '/demo-authentication'
 
 
 // ── Panel Component ────────────────────────────────────────────────────────────
@@ -306,7 +305,7 @@ export function AuthPage() {
         headers['Authorization'] = `Bearer ${jwtToken}`
       }
 
-      const response = await fetch(`${DEMOS_BASE}/Employee/?limit=100`, {
+      const response = await fetch(`${RESOURCE_ROUTE}/Employee/?limit=100`, {
         credentials: 'include',
         headers
       })
@@ -354,18 +353,23 @@ export function AuthPage() {
 
   return (
     <>
-      <LoginPage
-        user={user}
-        provider={provider}
-        authType={authType}
-        providers={configuredProviders}
-        error={error}
-        providerRoles={providerRoles}
-        onBasicLogin={handleBasicLogin}
-        onJwtLogin={handleJwtLogin}
-        onOAuthLogin={handleOAuthLogin}
-        onLogout={handleLogout}
-      />
+      <div className="panel">
+        <div className="panel-header">
+          <span className="panel-title">Authentication Method</span>
+        </div>
+        <LoginPage
+          user={user}
+          provider={provider}
+          authType={authType}
+          providers={configuredProviders}
+          error={error}
+          providerRoles={providerRoles}
+          onBasicLogin={handleBasicLogin}
+          onJwtLogin={handleJwtLogin}
+          onOAuthLogin={handleOAuthLogin}
+          onLogout={handleLogout}
+        />
+      </div>
 
       <div className="api-panels">
         <EmployeePanel

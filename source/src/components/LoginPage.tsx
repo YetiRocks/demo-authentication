@@ -109,13 +109,13 @@ const ROLE_ICONS: Record<string, () => JSX.Element> = {
 // ── Defaults ─────────────────────────────────────────────────────────────────
 
 const DEFAULT_BASIC_ACCOUNTS = [
-  { label: 'Login as Admin (Full Access)', username: 'admin', password: 'admin123', role: 'admin' as const },
-  { label: 'Login as Reader (Limited)',     username: 'user',  password: 'user123',  role: 'reader' as const },
+  { label: 'Login as Admin',  username: 'admin', password: 'admin123', role: 'admin' as const },
+  { label: 'Login as Reader', username: 'user',  password: 'user123',  role: 'reader' as const },
 ]
 
 const DEFAULT_JWT_ACCOUNTS = [
-  { label: 'JWT Login as Admin',  username: 'admin', password: 'admin123', role: 'admin' as const },
-  { label: 'JWT Login as Reader', username: 'user',  password: 'user123',  role: 'reader' as const },
+  { label: 'Login as Admin',  username: 'admin', password: 'admin123', role: 'admin' as const },
+  { label: 'Login as Reader', username: 'user',  password: 'user123',  role: 'reader' as const },
 ]
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -179,6 +179,36 @@ export default function LoginPage({
         </div>
       ) : (
         <div className="lp-form">
+          {showOAuth && (
+            <div className="lp-section">
+              <div className="lp-label">OAuth</div>
+              {providers.map(p => {
+                const cfg = PROVIDER_ICONS[p]
+                if (!cfg) return null
+                const Icon = cfg.icon
+                const roleLabel = providerRoles?.[p]
+                return (
+                  <button
+                    key={p}
+                    onClick={() => onOAuthLogin(p)}
+                    className="lp-btn"
+                    disabled={isLoggedIn}
+                  >
+                    <Icon />
+                    Login as {roleLabel || cfg.label}
+                  </button>
+                )
+              })}
+              {providers.length === 0 && (
+                <div className="lp-info">No OAuth providers configured</div>
+              )}
+            </div>
+          )}
+
+          {showOAuth && showBasic && (
+            <div className="lp-divider"><span>or use password</span></div>
+          )}
+
           {showBasic && (
             <div className="lp-section">
               <div className="lp-label">Basic Authentication</div>
@@ -196,7 +226,7 @@ export default function LoginPage({
             </div>
           )}
 
-          {showBasic && showJwt && (
+          {(showOAuth || showBasic) && showJwt && (
             <div className="lp-divider"><span>or use JWT tokens</span></div>
           )}
 
@@ -214,35 +244,6 @@ export default function LoginPage({
                   {a.label}
                 </button>
               ))}
-            </div>
-          )}
-
-          {(showBasic || showJwt) && showOAuth && (
-            <div className="lp-divider"><span>or continue with OAuth</span></div>
-          )}
-
-          {showOAuth && (
-            <div className="lp-section">
-              <div className="lp-label">OAuth</div>
-              {providers.map(p => {
-                const cfg = PROVIDER_ICONS[p]
-                if (!cfg) return null
-                const Icon = cfg.icon
-                return (
-                  <button
-                    key={p}
-                    onClick={() => onOAuthLogin(p)}
-                    className="lp-btn"
-                    disabled={isLoggedIn}
-                  >
-                    <Icon />
-                    Continue with {cfg.label}{providerRoles?.[p] ? ` (${providerRoles[p]})` : ''}
-                  </button>
-                )
-              })}
-              {providers.length === 0 && (
-                <div className="lp-info">No OAuth providers configured</div>
-              )}
             </div>
           )}
         </div>
