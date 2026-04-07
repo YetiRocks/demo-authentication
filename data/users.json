@@ -2,13 +2,13 @@
   {
     "username": "admin",
     "password": "admin123",
-    "roleId": "admin",
+    "roleId": "demo-authentication:admin",
     "email": "admin@example.com"
   },
   {
     "username": "user",
     "password": "user123",
-    "roleId": "viewer",
+    "roleId": "demo-authentication:viewer",
     "email": "user@example.com"
   }
 ]

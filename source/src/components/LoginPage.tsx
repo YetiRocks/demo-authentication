@@ -195,7 +195,7 @@ export default function LoginPage({
                     disabled={isLoggedIn}
                   >
                     <Icon />
-                    Login as {roleLabel || cfg.label}
+                    Login as {roleLabel ? roleLabel.charAt(0).toUpperCase() + roleLabel.slice(1) : cfg.label}
                   </button>
                 )
               })}

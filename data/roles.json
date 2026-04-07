@@ -1,11 +1,13 @@
 [
   {
     "id": "super_user",
+    "appId": "*",
     "name": "Super User",
     "permission": { "super_user": true, "databases": {} }
   },
   {
-    "id": "admin",
+    "id": "demo-authentication:admin",
+    "appId": "demo-authentication",
     "name": "Admin",
     "permission": {
       "databases": {
@@ -18,7 +20,8 @@
     }
   },
   {
-    "id": "viewer",
+    "id": "demo-authentication:viewer",
+    "appId": "demo-authentication",
     "name": "Viewer",
     "permission": {
       "databases": {

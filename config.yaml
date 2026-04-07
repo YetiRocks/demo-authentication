@@ -21,6 +21,8 @@ static:
     command: npm run build
 
 auth:
+  signup: auto
+  default_role: viewer
   jwt:
     secret: "${JWT_SECRET}"
     accessTtl: 900
