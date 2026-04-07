@@ -46,7 +46,7 @@ Restart yeti. The frontend builds automatically on first load via `npm run build
 ### 2. Log in with Basic auth
 
 ```bash
-curl -s https://localhost:9996/demo-authentication/Employee/?limit=5 \
+curl -s https://localhost/demo-authentication/Employee/?limit=5 \
   -u admin:admin123 | jq
 ```
 
@@ -68,7 +68,7 @@ Response (admin -- all fields visible):
 ```
 
 ```bash
-curl -s https://localhost:9996/demo-authentication/Employee/?limit=5 \
+curl -s https://localhost/demo-authentication/Employee/?limit=5 \
   -u user:user123 | jq
 ```
 
@@ -91,7 +91,7 @@ The same endpoint, the same data, different fields. The `viewer` role has `attri
 
 ```bash
 # Obtain a token pair
-curl -s -X POST https://localhost:9996/yeti-auth/login \
+curl -s -X POST https://localhost/yeti-auth/login \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "admin123"}' | jq
 ```
@@ -108,13 +108,13 @@ Response:
 
 ```bash
 # Use the access token
-curl -s https://localhost:9996/demo-authentication/Employee/?limit=5 \
+curl -s https://localhost/demo-authentication/Employee/?limit=5 \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIs..." | jq
 ```
 
 ```bash
 # Refresh when the access token expires (15 min default)
-curl -s -X POST https://localhost:9996/yeti-auth/jwt_refresh \
+curl -s -X POST https://localhost/yeti-auth/jwt_refresh \
   -H "Content-Type: application/json" \
   -d '{"refresh_token": "eyJhbGciOiJIUzI1NiIs..."}' | jq
 ```
@@ -136,13 +136,13 @@ OAuth requires a browser. The flow works like this:
 ```bash
 # 1. Redirect the user to the OAuth login endpoint
 #    (open in browser -- this initiates the provider redirect)
-open "https://localhost:9996/yeti-auth/oauth_login?provider=github&redirect_uri=/demo-authentication/"
+open "https://localhost/yeti-auth/oauth_login?provider=github&redirect_uri=/demo-authentication/"
 
 # 2. After the provider callback, the user lands back at the app
 #    with an authenticated session cookie
 
 # 3. Check the session
-curl -s https://localhost:9996/yeti-auth/oauth_user \
+curl -s https://localhost/yeti-auth/oauth_user \
   --cookie "yeti_session=<session-cookie>" | jq
 ```
 
@@ -162,7 +162,7 @@ Response:
 
 ```bash
 # 4. Discover available providers and their role mappings
-curl -s "https://localhost:9996/yeti-auth/oauth_providers?app_id=demo-authentication" | jq
+curl -s "https://localhost/yeti-auth/oauth_providers?app_id=demo-authentication" | jq
 ```
 
 Response:
@@ -182,7 +182,7 @@ Response:
 ### 5. Open the web UI
 
 ```
-https://localhost:9996/demo-authentication/
+https://localhost/demo-authentication/
 ```
 
 The React frontend provides a visual interface for all three auth methods. Log in with Basic or JWT using the seeded credentials, or click an OAuth provider button. After login, click "GET /Employee" to see the role-based field masking in action.
@@ -243,10 +243,10 @@ HTTP Basic auth using the `Authorization: Basic <base64>` header. Credentials ar
 
 ```bash
 # Admin -- full access
-curl -u admin:admin123 https://localhost:9996/demo-authentication/Employee/?limit=5
+curl -u admin:admin123 https://localhost/demo-authentication/Employee/?limit=5
 
 # Viewer -- restricted fields
-curl -u user:user123 https://localhost:9996/demo-authentication/Employee/?limit=5
+curl -u user:user123 https://localhost/demo-authentication/Employee/?limit=5
 ```
 
 **Seeded users:**
@@ -388,7 +388,7 @@ app_id: "demo-authentication"
 version: "1.0.0"
 description: "Role-based access control with Basic, JWT, and OAuth login"
 schemas:
-  - schemas/auth.graphql
+  path: schemas/auth.graphql
 
 dataLoader: data/employees.json        # Seed employee records on startup
 
@@ -396,11 +396,12 @@ authLoader:                             # Seed users and roles on startup
   roles: data/roles.json
   users: data/users.json
 
-static_files:                           # React SPA served at /
+static:                              # React SPA served at /
   path: web
+  route: /
   spa: true
   build:
-    sourceDir: source
+    source: source
     command: npm run build
 
 auth:
