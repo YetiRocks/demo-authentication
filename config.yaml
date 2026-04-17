@@ -6,6 +6,10 @@ description: "Role-based access control with Basic, JWT, and OAuth login"
 schemas:
   path: schemas/auth.graphql
 
+resources:
+  path: []
+  root: /api
+
 dataLoader: data/employees.json
 
 authLoader:
@@ -14,11 +18,11 @@ authLoader:
 
 static:
   path: web
-  route: /
+  root: /
   spa: true
   build:
     source: source
-    command: npm run build
+    command: npm install && npm run build
 
 auth:
   signup: auto

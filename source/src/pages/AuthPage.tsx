@@ -305,7 +305,7 @@ export function AuthPage() {
         headers['Authorization'] = `Bearer ${jwtToken}`
       }
 
-      const response = await fetch(`${RESOURCE_ROUTE}/Employee/?limit=100`, {
+      const response = await fetch(`${__STATIC_ROOT__}/${__RESOURCES_ROOT__}/Employee/?limit=100`, {
         credentials: 'include',
         headers
       })
