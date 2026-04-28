@@ -1,0 +1,39 @@
+name: "Authentication Demo"
+app_id: "demo-authentication"
+customer_id: "yeti"
+version: "1.0.0"
+description: "Authentication Demo"
+
+schemas:
+  path: schemas/auth.graphql
+
+static:
+  path: web
+  root: /
+  spa: true
+  build:
+    source: source
+    command: npm install && npm run build
+
+authLoader:
+  roles: ['data/roles.json', 'data/users.json']
+
+auth:
+  methods: [oauth, jwt]
+  signup: auto
+  default_role: viewer
+  email_signup: true
+  oauth:
+    google:
+      clientId: "${GOOGLE_CLIENT_ID}"
+      clientSecret: "${GOOGLE_CLIENT_SECRET}"
+    github:
+      clientId: "${GITHUB_CLIENT_ID}"
+      clientSecret: "${GITHUB_CLIENT_SECRET}"
+    rules:
+      - strategy: provider
+        pattern: "google"
+        role: admin
+      - strategy: provider
+        pattern: "github"
+        role: viewer
