@@ -16,7 +16,8 @@ static:
     command: npm install && npm run build
 
 authLoader:
-  roles: ['data/roles.json', 'data/users.json']
+  roles: data/roles.json
+  users: data/users.json
 
 auth:
   methods: [oauth, jwt]
