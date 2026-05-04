@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { syntaxHighlight } from '../utils.ts'
+import CodeBlock from '../components/CodeBlock'
 import LoginPage from '../components/LoginPage'
 import type { LoginUser } from '../components/LoginPage'
 
@@ -109,26 +109,16 @@ function EmployeePanel({ result, loading, error, statusCode, isLoggedIn, onFetch
             <p className="empty-hint">Fields returned depend on your role</p>
           </div>
         ) : error ? (
-          <pre className="results-pre error-text" style={{ flex: 1 }}>{error}</pre>
+          <CodeBlock value={error} language="text" className="error-text" />
         ) : (
           <>
-            <div className="results-container results-half">
+            <div className="results-half">
               <div className="results-label">Metadata</div>
-              <pre
-                className="results-pre"
-                dangerouslySetInnerHTML={{
-                  __html: syntaxHighlight(JSON.stringify(metadata, null, 2))
-                }}
-              />
+              <CodeBlock value={JSON.stringify(metadata, null, 2)} language="json" />
             </div>
-            <div className="results-container results-half">
+            <div className="results-half">
               <div className="results-label">Records</div>
-              <pre
-                className="results-pre"
-                dangerouslySetInnerHTML={{
-                  __html: syntaxHighlight(JSON.stringify(result?.data, null, 2))
-                }}
-              />
+              <CodeBlock value={JSON.stringify(result?.data, null, 2)} language="json" />
             </div>
           </>
         )}

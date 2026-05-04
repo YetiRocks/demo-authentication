@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import './LoginPage.css'
-
 // ── Types ────────────────────────────────────────────────────────────────────
 
 export interface LoginUser {
