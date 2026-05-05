@@ -24,7 +24,7 @@ Authentication tutorials usually demonstrate one method in isolation. Real appli
 
 This demo collapses all of that into yeti's declarative auth system:
 
-- **Three auth methods, zero application code** -- Basic, JWT, and OAuth are configured in `config.yaml` and enforced by the yeti-auth extension. No middleware to write, no token parsing, no session management.
+- **Three auth methods, zero application code** -- Basic, JWT, and OAuth are declared in `Cargo.toml` under `[package.metadata.auth]` and enforced by the yeti-auth extension. No middleware to write, no token parsing, no session management.
 - **Attribute-level permissions** -- roles define which table fields are visible. The `viewer` role cannot read `salary`, `ssn`, `homeAddress`, or `personalEmail`. The server strips these fields before serialization, not after.
 - **OAuth role mapping** -- provider-based rules assign roles automatically. Google users get `admin`, GitHub users get `viewer`. No user provisioning step required.
 - **Seed data on startup** -- `authLoader` and `dataLoader` populate users, roles, and employee records on first boot. The demo is functional immediately.
@@ -276,7 +276,7 @@ JSON Web Token auth using the `Authorization: Bearer <token>` header. Tokens are
 
 ### OAuth Authentication
 
-Browser-based OAuth 2.0 with automatic role assignment. Users are redirected to the provider, authenticated, and redirected back with a session cookie. No user pre-provisioning is needed -- role is determined by provider-based rules in `config.yaml`.
+Browser-based OAuth 2.0 with automatic role assignment. Users are redirected to the provider, authenticated, and redirected back with a session cookie. No user pre-provisioning is needed -- role is determined by provider-based rules under `[package.metadata.auth]` in `Cargo.toml`.
 
 **Configured providers:**
 
@@ -380,49 +380,49 @@ Seeded via `authLoader` on startup. Defines permissions per database, per table,
 
 ## Configuration
 
-### config.yaml
+App configuration lives in `Cargo.toml`. The `[package.metadata.app]` table covers the schema, seed loaders, and static SPA; the `[package.metadata.auth]` table declares which auth methods are enabled along with JWT, OAuth provider, and role-mapping settings. There is no separate `config.yaml` or `services.yaml`.
 
-```yaml
-name: "Authentication Demo"
-app_id: "demo-authentication"
-version: "1.0.0"
-description: "Role-based access control with Basic, JWT, and OAuth login"
-schemas:
-  path: schemas/auth.graphql
+```toml
+[package]
+name = "demo-authentication"
+version = "1.0.0"
+description = "Role-based access control with Basic, JWT, and OAuth login"
 
-dataLoader: data/employees.json        # Seed employee records on startup
+[package.metadata.app]
+schemas = "schemas/auth.graphql"
+dataLoader = "data/employees.json"
+static = { path = "web", source = "source", spa = true, build = "npm install && npm run build" }
 
-authLoader:                             # Seed users and roles on startup
-  roles: data/roles.json
-  users: data/users.json
+[package.metadata.app.authLoader]
+roles = "data/roles.json"
+users = "data/users.json"
 
-static:                              # React SPA served at /
-  path: web
-  route: /
-  spa: true
-  build:
-    source: source
-    command: npm run build
+[package.metadata.auth]
+methods = ["basic", "jwt", "oauth"]
 
-auth:
-  jwt:
-    secret: "${JWT_SECRET}"             # Set via environment variable
-    accessTtl: 900                      # 15 minutes
-    refreshTtl: 604800                  # 7 days
-  oauth:
-    github:
-      clientId: "${GITHUB_CLIENT_ID}"
-      clientSecret: "${GITHUB_CLIENT_SECRET}"
-    google:
-      clientId: "${GOOGLE_CLIENT_ID}"
-      clientSecret: "${GOOGLE_CLIENT_SECRET}"
-    rules:
-      - strategy: provider              # Match by OAuth provider name
-        pattern: "google"
-        role: admin                     # Google users -> admin role
-      - strategy: provider
-        pattern: "github"
-        role: viewer                    # GitHub users -> viewer role
+[package.metadata.auth.jwt]
+secret = "${JWT_SECRET}"     # Set via environment variable
+accessTtl = 900              # 15 minutes
+refreshTtl = 604800          # 7 days
+
+[package.metadata.auth.oauth.github]
+clientId = "${GITHUB_CLIENT_ID}"
+clientSecret = "${GITHUB_CLIENT_SECRET}"
+
+[package.metadata.auth.oauth.google]
+clientId = "${GOOGLE_CLIENT_ID}"
+clientSecret = "${GOOGLE_CLIENT_SECRET}"
+
+# Provider-based rules assign roles automatically on OAuth login.
+[[package.metadata.auth.oauth.rules]]
+strategy = "provider"
+pattern  = "google"
+role     = "admin"           # Google users -> admin role
+
+[[package.metadata.auth.oauth.rules]]
+strategy = "provider"
+pattern  = "github"
+role     = "viewer"          # GitHub users -> viewer role
 ```
 
 ### Environment Variables
@@ -479,7 +479,7 @@ The demo ships with three data files that are loaded on startup:
 
 ```
 demo-authentication/
-├── config.yaml              # App configuration with auth + OAuth rules
+├── Cargo.toml               # App + auth configuration ([package.metadata.app|auth])
 ├── schemas/
 │   └── auth.graphql         # Employee table with sensitive fields
 ├── data/
@@ -491,20 +491,35 @@ demo-authentication/
 │   ├── package.json
 │   ├── vite.config.ts
 │   └── src/
-│       ├── App.tsx              # Main app shell with navigation
-│       ├── main.tsx             # React entry point
-│       ├── pages/
-│       │   └── AuthPage.tsx     # Login + employee data panels
+│       ├── main.tsx                  # React entry point
+│       ├── App.tsx                   # Thin shell with navigation
+│       ├── api.ts                    # Fetch helpers
+│       ├── types.ts                  # Shared TypeScript types
+│       ├── utils.ts                  # JSON syntax highlighting
 │       ├── components/
-│       │   ├── LoginPage.tsx    # Auth method selector (Basic/JWT/OAuth)
-│       │   └── Footer.tsx       # Page footer
-│       ├── theme.ts             # CSS custom properties
-│       ├── utils.ts             # JSON syntax highlighting
-│       ├── auth.css             # Auth-specific styles
-│       ├── index.css            # Global styles
-│       └── yeti.css             # Yeti design system styles
+│       │   ├── LoginPage.tsx         # Demo's own auth method selector (Basic/JWT/OAuth)
+│       │   └── Footer.tsx            # Shared UI primitives
+│       ├── hooks/
+│       │   └── useAuth.ts            # Auth state hook
+│       ├── pages/
+│       │   └── AuthPage.tsx          # Login + employee data panels
+│       └── styles/
+│           ├── _vars.css             # Per-app brand colors and shared tokens
+│           ├── yeti.css              # Canonical Yeti stylesheet
+│           └── index.css             # App-specific overrides
 └── web/                     # Built output (generated by npm run build)
 ```
+
+This demo intentionally ships its own `components/LoginPage.tsx` instead of the standard `pages/Login.tsx` template -- LoginPage is the *subject* of the demo, with first-class UI for switching between Basic, JWT, and each OAuth provider. Other yeti UI apps use the simpler shared `pages/Login.tsx` + `useAuth` template that wraps the SPA with three lines:
+
+```tsx
+const auth = useAuth()
+if (auth === null) return <Loading/>
+if (!auth) return <Login/>
+return <App/>
+```
+
+Otherwise the layout follows the standard yeti UI app structure: thin `App.tsx`, root utility modules (`api.ts`, `types.ts`, `utils.ts`), shared UI in `components/`, hooks in `hooks/`, pages in `pages/`, stylesheets in `styles/` (`yeti.css` canonical, `_vars.css` per-app tokens, `index.css` overrides).
 
 ---
 
@@ -512,9 +527,9 @@ demo-authentication/
 
 | | demo-authentication | Typical Auth Setup |
 |---|---|---|
-| **Auth methods** | Basic + JWT + OAuth from config | Each method requires separate library/middleware |
+| **Auth methods** | Basic + JWT + OAuth from `[package.metadata.auth]` | Each method requires separate library/middleware |
 | **Field masking** | Declarative in role JSON | Custom serialization logic per endpoint |
-| **Role assignment** | OAuth rules in config.yaml | Manual user provisioning or custom mapping code |
+| **Role assignment** | OAuth rules in `Cargo.toml` | Manual user provisioning or custom mapping code |
 | **Seed data** | `authLoader` + `dataLoader` in config | Migration scripts or manual setup |
 | **Password hashing** | Argon2id (OWASP params), automatic | Choose library, configure parameters, test |
 | **Token refresh** | Built-in endpoint, automatic rotation | Custom refresh logic and token storage |
