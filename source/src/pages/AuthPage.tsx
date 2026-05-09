@@ -218,10 +218,10 @@ export function AuthPage() {
     setEmployeeStatusCode(null)
   }, [])
 
-  // JWT login -- POST to /yeti-auth/login, store token
+  // JWT login -- POST to /yeti-auth/api-token, store token
   const handleJwtLogin = useCallback(async (username: string, password: string) => {
     try {
-      const response = await fetch(`${AUTH_BASE}/login`, {
+      const response = await fetch(`${AUTH_BASE}/api-token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -262,7 +262,7 @@ export function AuthPage() {
         })
       }
       // Always call JWT logout to clear the yeti_token cookie
-      await fetch(`${AUTH_BASE}/login`, {
+      await fetch(`${AUTH_BASE}/api-token`, {
         method: 'DELETE',
         credentials: 'include',
       })

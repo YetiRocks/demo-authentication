@@ -46,12 +46,19 @@
   --lp-error-border: rgba(209, 105, 105, 0.3);
   --lp-error-text: var(--color-error, #bb2124);
 
-  /* ── Layout ── */
+  /* ── Layout ──
+   * Override yeti.css's full-page-login defaults (margin-top: 73px /
+   * height: calc(100vh - 73px) account for the global nav when login
+   * is the entire viewport). Here it's nested inside a .panel, so we
+   * unset those and center vertically within the panel instead. */
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   overflow: auto;
   min-height: 0;
+  height: auto;
+  margin-top: 0;
   flex: 1;
   padding: 2rem 1rem;
   background: var(--lp-bg);
