@@ -246,9 +246,12 @@ export function AuthPage() {
     }
   }, [])
 
-  // OAuth login -- redirect to yeti-auth OAuth flow
+  // OAuth login -- redirect to yeti-auth OAuth flow. The redirect target is the
+  // app's served mount (`/` standalone, `/www/demo-authentication/` nested),
+  // read at runtime from the host-injected base rather than baked to a fixed
+  // `/demo-authentication/`, so the same bundle works at any mount.
   const handleOAuthLogin = useCallback((p: string) => {
-    const redirectUri = encodeURIComponent('/demo-authentication/')
+    const redirectUri = encodeURIComponent(`${__STATIC_ROOT__}/`)
     window.location.href = `${AUTH_BASE}/oauth_login?provider=${p}&redirect_uri=${redirectUri}`
   }, [])
 
