@@ -1,6 +1,6 @@
 # Auth Demo Schema - Employee table for RBAC demonstration
 
-type Employee @table(database: "demo-authentication") @export {
+type Employee @table(database: "demo-authentication") @distribute @export {
   id: String!
   name: String!
   email: String!
