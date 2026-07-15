@@ -221,10 +221,15 @@ export function AuthPage() {
   // JWT login -- POST to /yeti-auth/api-token, store token
   const handleJwtLogin = useCallback(async (username: string, password: string) => {
     try {
+      // `app_id` scopes the login to this deployment app: it selects the
+      // customer-deployment user namespace (YTC-972 — an absent app_id resolves
+      // the control-plane operator, not this app's user) AND grants the issued
+      // token access to demo-authentication's tables. The OAuth path already
+      // scopes by app_id; the JWT path must match.
       const response = await fetch(`${AUTH_BASE}/api-token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, app_id: 'demo-authentication' }),
       })
       if (!response.ok) {
         const data = await response.json()
