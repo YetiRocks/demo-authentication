@@ -5,7 +5,7 @@ description = "Authentication Demo"
 version = "1.0.0"
 
 [package.metadata.app]
-customer_id = "yeti"
+account_id = "yeti"
 schemas = "schemas/auth.graphql"
 static = { path = "web", root = "/", source = "source", spa = true, build = "npm install && npm run build" }
 loaders = { data = "data/employees.json", auth = ["data/roles.json", "data/users.json"] }
