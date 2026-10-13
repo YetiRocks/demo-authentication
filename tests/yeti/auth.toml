@@ -1,0 +1,258 @@
+# demo-authentication: the Employee table under role-based field access.
+# Demo accounts are the ones the app seeds (data/users.json): admin and user.
+# Anonymous and viewer see the public columns; admin sees salary, ssn and the
+# home address.
+
+
+[[case]]
+name = "list Employee"
+protocol = "http"
+path = "/api/employee/?limit=2"
+[case.expect]
+status = 200
+content_type = "json"
+shape = "array"
+[[case.expect.json]]
+pointer = "/0/id"
+type = "string"
+
+
+[[case]]
+name = "get Employee emp-001"
+protocol = "http"
+path = "/api/employee/emp-001"
+[case.expect]
+status = 200
+content_type = "json"
+shape = "object"
+[[case.expect.json]]
+pointer = "/id"
+equals = "emp-001"
+[[case.expect.json]]
+pointer = "/name"
+equals = "Alice Johnson"
+
+
+[[case]]
+name = "absent Employee row is a problem 404"
+protocol = "http"
+path = "/api/employee/yt-absent-{run}"
+[case.expect]
+status = 404
+content_type = "application/problem+json"
+shape = "problem"
+
+
+[[case]]
+name = "GraphQL list Employee"
+protocol = "graphql"
+query = "{ Employee(limit: 1) { id } }"
+[case.expect]
+status = 200
+content_type = "json"
+[[case.expect.json]]
+pointer = "/data/Employee"
+type = "array"
+[[case.expect.json]]
+pointer = "/data/Employee/0/id"
+type = "string"
+
+
+[[case]]
+name = "anonymous REST hides ssn"
+protocol = "http"
+path = "/api/employee/emp-001"
+[case.expect]
+status = 200
+content_type = "json"
+[[case.expect.json]]
+pointer = "/ssn"
+present = false
+[[case.expect.json]]
+pointer = "/salary"
+present = false
+[[case.expect.json]]
+pointer = "/email"
+equals = "alice@example.com"
+
+
+[[case]]
+name = "admin Basic auth sees ssn and salary over REST"
+protocol = "http"
+path = "/api/employee/emp-001"
+headers = { Authorization = "Basic YWRtaW46YWRtaW4xMjM=" }
+[case.expect]
+status = 200
+content_type = "json"
+[[case.expect.json]]
+pointer = "/ssn"
+equals = "123-45-6789"
+[[case.expect.json]]
+pointer = "/salary"
+type = "number"
+[[case.expect.json]]
+pointer = "/homeAddress"
+type = "string"
+
+
+[[case]]
+name = "viewer Basic auth does not see ssn over REST"
+protocol = "http"
+path = "/api/employee/emp-001"
+headers = { Authorization = "Basic dXNlcjp1c2VyMTIz" }
+[case.expect]
+status = 200
+content_type = "json"
+[[case.expect.json]]
+pointer = "/ssn"
+present = false
+[[case.expect.json]]
+pointer = "/salary"
+present = false
+
+
+[[case]]
+name = "wrong password is refused"
+protocol = "http"
+path = "/api/employee/emp-001"
+headers = { Authorization = "Basic YWRtaW46d3Jvbmc=" }
+[case.expect]
+status = 401
+content_type = "application/problem+json"
+shape = "problem"
+
+
+[[case]]
+name = "GraphQL as admin sees ssn"
+protocol = "graphql"
+query = "{ Employee(limit: 1) { id ssn salary } }"
+headers = { Authorization = "Basic YWRtaW46YWRtaW4xMjM=" }
+[case.expect]
+status = 200
+content_type = "json"
+[[case.expect.json]]
+pointer = "/data/Employee/0/ssn"
+type = "string"
+
+
+[[case]]
+name = "anonymous GraphQL hides ssn and salary like REST does"
+protocol = "graphql"
+query = "{ Employee(limit: 1) { id email ssn salary } }"
+[case.expect]
+status = 200
+content_type = "json"
+[[case.expect.json]]
+pointer = "/data/Employee/0/email"
+type = "string"
+[[case.expect.json]]
+pointer = "/data/Employee/0/ssn"
+present = false
+[[case.expect.json]]
+pointer = "/data/Employee/0/salary"
+present = false
+
+
+[[case]]
+name = "MCP initialize"
+protocol = "mcp"
+rpc = "initialize"
+[case.expect]
+status = 200
+[[case.expect.json]]
+pointer = "/result/serverInfo/name"
+type = "string"
+[[case.expect.json]]
+pointer = "/result/protocolVersion"
+type = "string"
+
+
+[[case]]
+name = "MCP tools/list names the table tools"
+protocol = "mcp"
+rpc = "tools/list"
+[case.expect]
+status = 200
+contains = "employee_list"
+[[case.expect.json]]
+pointer = "/result/tools"
+type = "array"
+[[case.expect.json]]
+pointer = "/result/tools/0/name"
+type = "string"
+
+
+[[case]]
+name = "MCP tools/call employee_list"
+protocol = "mcp"
+rpc = "tools/call"
+params = { name = "employee_list", arguments = { limit = 1 } }
+[case.expect]
+status = 200
+[[case.expect.json]]
+pointer = "/result/isError"
+equals = false
+[[case.expect.json]]
+pointer = "/result/content/0/type"
+equals = "text"
+[[case.expect.json]]
+pointer = "/result/content/0/text"
+type = "string"
+
+
+[[case]]
+name = "MCP unknown method is a JSON-RPC error"
+protocol = "mcp"
+rpc = "no/such/method"
+[case.expect]
+status = 200
+[[case.expect.json]]
+pointer = "/error/code"
+equals = -32601
+
+
+[[case]]
+name = "SSE opens on Employee"
+protocol = "sse"
+path = "/api/employee?stream=sse"
+
+
+[[case]]
+name = "gRPC-Web opens on Employee"
+protocol = "grpcweb"
+path = "/api/employee?stream=grpcweb"
+
+
+[[case]]
+name = "WebSocket opens on Employee"
+protocol = "ws"
+path = "/api/employee"
+
+
+[[case]]
+name = "MQTT subscribes to Employee"
+protocol = "mqtt"
+table = "Employee"
+
+
+[[case]]
+name = "anonymous create is refused"
+protocol = "http"
+method = "POST"
+path = "/api/employee"
+json = { id = "yt-{run}", name = "x", email = "x@example.com", department = "x", title = "x" }
+[case.expect]
+status = [401, 403]
+content_type = "application/problem+json"
+shape = "problem"
+
+
+[[case]]
+name = "anonymous delete is refused"
+protocol = "http"
+method = "DELETE"
+path = "/api/employee/emp-001"
+[case.expect]
+status = [401, 403]
+content_type = "application/problem+json"
+shape = "problem"

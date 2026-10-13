@@ -31,4 +31,8 @@ rules = [
   { strategy = "provider", pattern = "github", role = "viewer" },
 ]
 
+[package.metadata.app.tests]
+dir = "tests/yeti"
+writes = "disposable"
+
 [dependencies]
