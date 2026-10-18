@@ -33,6 +33,7 @@ rules = [
 
 [package.metadata.app.tests]
 dir = "tests/yeti"
+ui = "tests/ui"
 writes = "disposable"
 
 [dependencies]

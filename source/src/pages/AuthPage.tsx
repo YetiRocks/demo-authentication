@@ -176,8 +176,20 @@ export function AuthPage() {
       return
     }
 
-    // Check for existing OAuth session via yeti-auth
+    // Check for an existing OAuth session via yeti-auth. The session cookie is
+    // HttpOnly, so the page cannot see whether it holds one. `/auth` answers
+    // 200 for every caller (`authenticated: false` when anonymous), while
+    // `/oauth_user` refuses a caller with no session with 401, so the profile
+    // is read only once `/auth` reports an OAuth session (YTC-2435).
     try {
+      const status = await fetch(`${AUTH_BASE}/auth`, {
+        credentials: 'include',
+      })
+      const session = status.ok ? await status.json() : null
+      if (!session?.authenticated || session.method !== 'oauth') {
+        setLoading(false)
+        return
+      }
       const response = await fetch(`${AUTH_BASE}/oauth_user`, {
         credentials: 'include',
       })
