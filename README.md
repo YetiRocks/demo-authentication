@@ -455,7 +455,7 @@ The demo ships with three data files that are loaded on startup:
 
 | Endpoint | Methods | Description |
 |----------|---------|-------------|
-| `/demo-authentication/Employee` | GET, POST | List/create employees |
+| `/demo-authentication/Employee/` | GET, POST | List/create employees |
 | `/demo-authentication/Employee/{id}` | GET, PUT, DELETE | Read/update/delete an employee |
 | `/demo-authentication/Employee?stream=sse` | GET | Real-time SSE stream of changes |
 
