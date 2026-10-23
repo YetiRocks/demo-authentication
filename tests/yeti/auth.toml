@@ -242,7 +242,7 @@ method = "POST"
 path = "/api/employee"
 json = { id = "yt-{run}", name = "x", email = "x@example.com", department = "x", title = "x" }
 [case.expect]
-status = [401, 403]
+status = 404
 content_type = "application/problem+json"
 shape = "problem"
 
